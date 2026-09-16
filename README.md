@@ -1,17 +1,46 @@
-# threejs_demo
+# Three.js Robot Demo
 
-A new Flutter project.
+A Flutter application that embeds a Three.js scene in an in-app WebView. It loads the animated `RobotExpressive` glTF model and provides native Flutter controls for selecting an animation and posing the robot's head.
 
-## Getting Started
+## Features
 
-This project is a starting point for a Flutter application.
+- Interactive Three.js scene with orbit camera controls, lighting, grid, and ground plane.
+- Animated RobotExpressive glTF model, loaded from the official Three.js examples site.
+- Animation picker populated from the model at runtime.
+- X, Y, and Z inputs to set the robot head orientation while the **Still** animation is selected.
 
-A few resources to get you started if this is your first Flutter project:
+## Requirements
 
-- [Learn Flutter](https://docs.flutter.dev/get-started/learn-flutter)
-- [Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Flutter learning resources](https://docs.flutter.dev/reference/learning-resources)
+- Flutter SDK compatible with Dart `>=3.0.0 <4.0.0`
+- A device or emulator with WebView support
+- Internet access while the app runs, since Three.js modules and the robot model are fetched from CDNs.
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Run locally
+
+```bash
+flutter pub get
+flutter run
+```
+
+To list available targets first, run:
+
+```bash
+flutter devices
+```
+
+## How it works
+
+The Flutter UI is defined in `lib/main.dart`. It uses `flutter_inappwebview` to render an inline HTML document. The document imports Three.js, `GLTFLoader`, and `OrbitControls`; after the model has loaded, it sends its animation names back to Flutter through a JavaScript handler. Flutter then invokes JavaScript functions to switch animations or update the head pose.
+
+## Project structure
+
+```text
+lib/main.dart          Flutter UI and embedded Three.js scene
+assets/threejs/        Local experiment assets (not used by the current inline scene)
+pubspec.yaml           Flutter dependencies and SDK constraints
+```
+
+## Notes
+
+- The inline scene currently fetches the model from `threejs.org`; the bundled `assets/threejs/RobotExpressive.glb` is not the source used at runtime.
+- Head orientation and spin behavior only apply when the **Still** animation is active.
